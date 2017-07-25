@@ -112,19 +112,12 @@ SkyEngineSpine.Node = CLASS({
 					animationState = new spine.AnimationState(animationStateData);
 					animationState.setAnimation(0, animation, true);
 					animationState.addListener({
-						event : (trackIndex, event) => {
-							//console.log('Event on track ' + trackIndex + ': ' + JSON.stringify(event));
-						},
-						complete : (trackIndex, loopCount) => {
-							//console.log('Animation on track ' + trackIndex + ' completed');
-						},
-						start : (trackIndex) => {
-							//console.log('Animation on track ' + trackIndex + ' started');
-						},
-						end : (trackIndex) => {
-							//console.log('Animation on track ' + trackIndex + ' ended');
+						complete : () => {
+							self.fireEvent('animationend');
 						}
 					});
+					
+					self.fireEvent('load');
 				}
 				
 				if (skeleton !== undefined) {
