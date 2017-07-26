@@ -125,7 +125,6 @@ SkyEngineSpine.Node = CLASS({
 					if (skeletonRenderer === undefined) {
 						skeletonRenderer = new spine.canvas.SkeletonRenderer(context);
 						skeletonRenderer.debugRendering = CONFIG.SkyEngine.isDebugMode;
-						skeletonRenderer.triangleRendering = true;
 					}
 					
 					// draw
