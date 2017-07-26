@@ -60,7 +60,7 @@ SkyEngineSpine.Node = CLASS({
 			step = self.step = (deltaTime) => {
 				
 				if (animationState !== undefined) {
-					animationState.update(deltaTime / 1000);
+					animationState.update(deltaTime);
 				}
 				
 				origin(deltaTime);
