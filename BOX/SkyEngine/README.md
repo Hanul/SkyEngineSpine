@@ -58,10 +58,8 @@ SkyEngine의 모든 구성요소는 노드를 확장합니다.
 
 ## 기타 문서
 * [튜토리얼](DOC/Tutorial.md)
+* [UI 개발](DOC/UI.md)
 * [API 문서](API/README.md)
-
-## TODO
-https://trello.com/b/S3rayJx2/skyengine
 
 ## 라이센스
 [MIT](LICENSE)
