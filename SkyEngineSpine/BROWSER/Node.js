@@ -13,8 +13,8 @@ SkyEngineSpine.Node = CLASS({
 		//REQUIRED: params.atlas
 		//REQUIRED: params.png
 		//REQUIRED: params.animation
-		//OPITONAL: params.skin
-		//OPITONAL: params.mixInfos
+		//OPTIONAL: params.skin
+		//OPTIONAL: params.mixInfos
 		
 		let json = params.json;
 		let atlas = params.atlas;
@@ -38,6 +38,7 @@ SkyEngineSpine.Node = CLASS({
 		
 		let skeletonRenderer;
 		
+		// 스킨을 변경합니다.
 		let changeSkin = self.changeSkin = (_skin) => {
 			skin = _skin;
 			
@@ -46,6 +47,7 @@ SkyEngineSpine.Node = CLASS({
 			}
 		};
 		
+		// 애니메이션을 변경합니다.
 		let changeAnimation = self.changeAnimation = (_animation) => {
 			animation = _animation;
 			

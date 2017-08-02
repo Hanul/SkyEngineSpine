@@ -1,6 +1,10 @@
 # SkyEngineSpine
+[SkyEngine](http://skyengine.uppercase.io/)에서 [Spine](http://ko.esotericsoftware.com/) 애니메이션을 사용할 수 있도록 하는 BOX입니다.
 
-사용방법
+## 설치하기
+프로젝트의 `DEPENDENCY` 파일에 `Hanul/SkyEngineSpine`을 추가합니다.
+
+## 사용 예시
 ```javascript
 let spineNode = SkyEngineSpine.Node({
 	json : SkyEngineSpineSample.R('spineboy.json'),
@@ -16,6 +20,12 @@ let spineNode = SkyEngineSpine.Node({
 	}]
 }).appendTo(SkyEngine.Screen);
 ```
+
+## API 문서
+[API](API/README.md)
+
+## 소스코드
+https://github.com/Hanul/SkyEngineSpine
 
 ## 작성자
 [Young Jae Sim](https://github.com/Hanul)
