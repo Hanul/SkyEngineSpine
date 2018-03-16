@@ -53,6 +53,11 @@ SkyEngineSpine.Node = CLASS({
 			
 			if (animationState !== undefined) {
 				animationState.setAnimation(0, animation, true);
+				
+				if (skeleton !== undefined) {
+					animationState.apply(skeleton);
+					skeleton.updateWorldTransform();
+				}
 			}
 		};
 		

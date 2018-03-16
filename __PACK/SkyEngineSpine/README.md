@@ -21,6 +21,13 @@ let spineNode = SkyEngineSpine.Node({
 }).appendTo(SkyEngine.Screen);
 ```
 
+## 애니메이션이 끝났을때의 이벤트 등록
+```javascript
+spineNode.on('animationend', () => {
+	spineNode.changeAnimation('walk');
+});
+```
+
 ## API 문서
 [API](API/README.md)
 
