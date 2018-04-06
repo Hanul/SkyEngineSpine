@@ -34,8 +34,6 @@ SkyEngineSpine.Node = CLASS({
 		
 		let skeleton;
 		let animationState;
-		let bounds;
-		
 		let skeletonRenderer;
 		
 		// 스킨을 변경합니다.
@@ -74,6 +72,12 @@ SkyEngineSpine.Node = CLASS({
 			};
 		});
 		
+		self.on('remove', () => {
+			skeleton = undefined;
+			animationState = undefined;
+			skeletonRenderer = undefined;
+		});
+		
 		let draw;
 		OVERRIDE(self.draw, (origin) => {
 			
@@ -101,7 +105,7 @@ SkyEngineSpine.Node = CLASS({
 					
 					skeleton.getBounds(offset, size, []);
 					
-					bounds = {
+					let bounds = {
 						offset : offset,
 						size : size
 					};
@@ -136,8 +140,10 @@ SkyEngineSpine.Node = CLASS({
 					
 					// draw
 					animationState.apply(skeleton);
-					skeleton.updateWorldTransform();
-					skeletonRenderer.draw(skeleton);
+					if (skeleton !== undefined) {
+						skeleton.updateWorldTransform();
+						skeletonRenderer.draw(skeleton);
+					}
 				}
 				
 				origin(context);
