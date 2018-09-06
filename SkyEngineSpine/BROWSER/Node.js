@@ -59,6 +59,10 @@ SkyEngineSpine.Node = CLASS({
 			}
 		};
 		
+		let getAnimation = self.getAnimation = () => {
+			return animation;
+		};
+		
 		let step;
 		OVERRIDE(self.step, (origin) => {
 			
