@@ -70,6 +70,7 @@ SkyEngineSpine.Node = CLASS({
 				
 				if (animationState !== undefined) {
 					animationState.update(deltaTime);
+					animationState.apply(skeleton);
 				}
 				
 				origin(deltaTime);
@@ -143,7 +144,6 @@ SkyEngineSpine.Node = CLASS({
 					}
 					
 					// draw
-					animationState.apply(skeleton);
 					if (skeleton !== undefined) {
 						skeleton.updateWorldTransform();
 						skeletonRenderer.draw(skeleton);
