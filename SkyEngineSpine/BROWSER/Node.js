@@ -127,6 +127,7 @@ SkyEngineSpine.Node = CLASS({
 					
 					animationState = new spine.AnimationState(animationStateData);
 					animationState.setAnimation(0, animation, true);
+					animationState.apply(skeleton);
 					animationState.addListener({
 						complete : () => {
 							self.fireEvent('animationend');
