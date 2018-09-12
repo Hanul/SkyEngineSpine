@@ -129,6 +129,9 @@ SkyEngineSpine.Node = CLASS({
 					animationState.setAnimation(0, animation, true);
 					animationState.apply(skeleton);
 					animationState.addListener({
+						event : (entry, event) => {
+							self.fireEvent(event.data.name);
+						},
 						complete : () => {
 							self.fireEvent('animationend');
 						}
