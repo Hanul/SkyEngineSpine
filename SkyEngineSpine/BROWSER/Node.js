@@ -78,6 +78,10 @@ SkyEngineSpine.Node = CLASS({
 		});
 		
 		self.on('remove', () => {
+			
+			assetManager.removeAll();
+			
+			assetManager = undefined;
 			skeleton = undefined;
 			animationState = undefined;
 			skeletonRenderer = undefined;
