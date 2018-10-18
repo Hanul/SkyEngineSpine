@@ -27,21 +27,48 @@ SkyEngineSpine.Node = CLASS({
 			skin = 'default';
 		}
 		
-		let assetManager = new spine.canvas.AssetManager();
-		assetManager.loadText(json);
-		assetManager.loadText(atlas);
-		assetManager.loadTexture(png);
+		let pixiSpine;
 		
-		let skeleton;
-		let animationState;
-		let skeletonRenderer;
+		// 데이터 로딩
+		PIXI.loader.add('data', json).load((loader, res) => {
+			
+			if (self.checkIsRemoved() !== true) {
+				
+				pixiSpine = new PIXI.spine.Spine(res.data.spineData);
+				
+				pixiSpine.skeleton.setSkinByName(skin);
+				pixiSpine.state.setAnimation(0, animation, true);
+				
+				if (mixInfos !== undefined) {
+					EACH(mixInfos, (mixInfo) => {
+						pixiSpine.stateData.setMixByName(mixInfo.from, mixInfo.to, mixInfo.duration);
+					});
+				}
+				
+				pixiSpine.zIndex = -9999999;
+				pixiSpine.blendMode = SkyEngine.Util.BlendMode.getPixiBlendMode(self.getBlendMode());
+				
+				pixiSpine.state.addListener({
+					event : (entry, event) => {
+						self.fireEvent(event.data.name);
+					},
+					complete : () => {
+						self.fireEvent('animationend');
+					}
+				});
+				
+				self.addToPixiContainer(pixiSpine);
+				
+				self.fireEvent('load');
+			}
+		});
 		
 		// 스킨을 변경합니다.
 		let changeSkin = self.changeSkin = (_skin) => {
 			skin = _skin;
 			
-			if (skeleton !== undefined) {
-				skeleton.setSkinByName(skin);
+			if (pixiSpine !== undefined) {
+				pixiSpine.skeleton.setSkinByName(skin);
 			}
 		};
 		
@@ -49,117 +76,13 @@ SkyEngineSpine.Node = CLASS({
 		let changeAnimation = self.changeAnimation = (_animation) => {
 			animation = _animation;
 			
-			if (animationState !== undefined) {
-				animationState.setAnimation(0, animation, true);
-				
-				if (skeleton !== undefined) {
-					animationState.apply(skeleton);
-					skeleton.updateWorldTransform();
-				}
+			if (pixiSpine !== undefined) {
+				pixiSpine.state.setAnimation(0, animation, true);
 			}
 		};
 		
 		let getAnimation = self.getAnimation = () => {
 			return animation;
 		};
-		
-		let step;
-		OVERRIDE(self.step, (origin) => {
-			
-			step = self.step = (deltaTime) => {
-				
-				if (animationState !== undefined) {
-					animationState.update(deltaTime);
-					animationState.apply(skeleton);
-				}
-				
-				origin(deltaTime);
-			};
-		});
-		
-		self.on('remove', () => {
-			
-			assetManager.removeAll();
-			
-			assetManager = undefined;
-			skeleton = undefined;
-			animationState = undefined;
-			skeletonRenderer = undefined;
-		});
-		
-		let draw;
-		OVERRIDE(self.draw, (origin) => {
-			
-			draw = self.draw = (context) => {
-				
-				if (skeleton === undefined && assetManager.isLoadingComplete() === true) {
-					
-					skeleton = new spine.Skeleton(
-						new spine.SkeletonJson(
-							new spine.AtlasAttachmentLoader(
-								new spine.TextureAtlas(assetManager.get(atlas), (path) => {
-									return assetManager.get(png);
-								})
-							)
-						).readSkeletonData(assetManager.get(json))
-					);
-					
-					skeleton.flipY = true;
-					
-					skeleton.setToSetupPose();
-					skeleton.updateWorldTransform();
-					
-					let offset = new spine.Vector2();
-					let size = new spine.Vector2();
-					
-					skeleton.getBounds(offset, size, []);
-					
-					let bounds = {
-						offset : offset,
-						size : size
-					};
-					
-					skeleton.setSkinByName(skin);
-					
-					let animationStateData = new spine.AnimationStateData(skeleton.data);
-					
-					if (mixInfos !== undefined) {
-						EACH(mixInfos, (mixInfo) => {
-							animationStateData.setMix(mixInfo.from, mixInfo.to, mixInfo.duration);
-						});
-					}
-					
-					animationState = new spine.AnimationState(animationStateData);
-					animationState.setAnimation(0, animation, true);
-					animationState.apply(skeleton);
-					animationState.addListener({
-						event : (entry, event) => {
-							self.fireEvent(event.data.name);
-						},
-						complete : () => {
-							self.fireEvent('animationend');
-						}
-					});
-					
-					self.fireEvent('load');
-				}
-				
-				if (skeleton !== undefined) {
-					
-					if (skeletonRenderer === undefined) {
-						skeletonRenderer = new spine.canvas.SkeletonRenderer(context);
-						skeletonRenderer.debugRendering = BROWSER_CONFIG.SkyEngine.isDebugMode;
-					}
-					
-					// draw
-					if (skeleton !== undefined) {
-						skeleton.updateWorldTransform();
-						skeletonRenderer.draw(skeleton);
-					}
-				}
-				
-				origin(context);
-			};
-		});
 	}
 });
