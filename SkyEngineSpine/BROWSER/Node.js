@@ -31,6 +31,7 @@ SkyEngineSpine.Node = CLASS({
 		
 		let rawSkeletonData;
 		let rawAtlasData;
+		let img;
 		
 		PARALLEL([
 		(done) => {
@@ -49,12 +50,22 @@ SkyEngineSpine.Node = CLASS({
 			});
 		},
 		
+		(done) => {
+			
+			img = new Image();
+			img.onload = () => {
+				img.onload = undefined;
+				done();
+			};
+			img.src = png;
+		},
+		
 		() => {
 			
 			if (self.checkIsRemoved() !== true) {
 				
 				let spineAtlas = new PIXI.spine.core.TextureAtlas(rawAtlasData, (notUsing, callback) => {
-					callback(PIXI.BaseTexture.fromImage(png));
+					callback(new PIXI.BaseTexture(img));
 				});
 				
 				let spineAtlasLoader = new PIXI.spine.core.AtlasAttachmentLoader(spineAtlas);
