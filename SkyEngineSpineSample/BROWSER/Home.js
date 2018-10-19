@@ -8,6 +8,8 @@ SkyEngineSpineSample.Home = CLASS({
 		
 		let spineNode = SkyEngineSpine.Node({
 			json : SkyEngineSpineSample.R('spineboy.json'),
+			atlas : SkyEngineSpineSample.R('spineboy.atlas'),
+			png : SkyEngineSpineSample.R('spineboy.png'),
 			animation : 'walk',
 			centerY : -300,
 			scale : 0.5,

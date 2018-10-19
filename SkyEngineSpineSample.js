@@ -7,15 +7,15 @@ BOOT({
 		title : 'SkyEngine Spine Sample',
 		
 		isDevMode : true,
-		webServerPort : 8725,
+		webServerPort : 8725
+	},
+	
+	BROWSER_CONFIG : {
+		isNotToConnectServer : true,
 		
 		SkyEngine : {
 			isDebugMode : true
 		}
-	},
-	
-	BROWSER_CONFIG : {
-		isNotToConnectServer : true
 	},
 	
 	NODE_CONFIG : {
