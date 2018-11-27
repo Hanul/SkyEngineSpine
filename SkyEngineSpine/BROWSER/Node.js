@@ -58,6 +58,8 @@ SkyEngineSpine.Node = CLASS({
 				
 				let img = new Image();
 				
+				img.crossOrigin = 'anonymous';
+				
 				img.onload = () => {
 					
 					img.onload = undefined;
