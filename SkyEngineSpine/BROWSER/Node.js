@@ -31,7 +31,6 @@ SkyEngineSpine.Node = CLASS({
 		
 		let rawSkeletonData;
 		let rawAtlasData;
-		let pixiTexture;
 		
 		PARALLEL([
 		(done) => {
@@ -50,83 +49,47 @@ SkyEngineSpine.Node = CLASS({
 			});
 		},
 		
-		(done) => {
-			
-			pixiTexture = PIXI.utils.TextureCache[png];
-			
-			if (pixiTexture === undefined) {
-				
-				let img = new Image();
-				
-				img.crossOrigin = 'anonymous';
-				
-				img.onload = () => {
-					
-					img.onload = undefined;
-					
-					if (self.checkIsRemoved() !== true) {
-						
-						if (PIXI.utils.TextureCache[png] !== undefined) {
-							pixiTexture = PIXI.utils.TextureCache[png];
-						}
-						
-						else {
-							
-							pixiTexture = new PIXI.Texture.from(img);
-							
-							PIXI.Texture.addToCache(pixiTexture, png);
-						}
-						
-						done();
-					}
-				};
-				
-				img.src = png;
-			}
-			
-			else {
-				done();
-			}
-		},
-		
 		() => {
 			
-			if (self.checkIsRemoved() !== true) {
+			SkyEngine.LoadTexture(png, (texture) => {
 				
-				let spineAtlas = new PIXI.spine.core.TextureAtlas(rawAtlasData, (notUsing, callback) => {
-					callback(pixiTexture.baseTexture);
-				});
-				
-				let spineAtlasLoader = new PIXI.spine.core.AtlasAttachmentLoader(spineAtlas);
-				let spineJsonParser = new PIXI.spine.core.SkeletonJson(spineAtlasLoader);
-				
-				pixiSpine = new PIXI.spine.Spine(spineJsonParser.readSkeletonData(rawSkeletonData));
-				
-				pixiSpine.skeleton.setSkinByName(skin);
-				pixiSpine.state.setAnimation(0, animation, true);
-				
-				if (mixInfos !== undefined) {
-					EACH(mixInfos, (mixInfo) => {
-						pixiSpine.stateData.setMixByName(mixInfo.from, mixInfo.to, mixInfo.duration);
+				if (self.checkIsRemoved() !== true) {
+					
+					let spineAtlas = new PIXI.spine.core.TextureAtlas(rawAtlasData, (notUsing, callback) => {
+						callback(texture.baseTexture);
 					});
-				}
-				
-				pixiSpine.zIndex = -9999999;
-				pixiSpine.blendMode = SkyEngine.Util.BlendMode.getPixiBlendMode(self.getBlendMode());
-				
-				pixiSpine.state.addListener({
-					event : (entry, event) => {
-						self.fireEvent(event.data.name);
-					},
-					complete : () => {
-						self.fireEvent('animationend');
+					
+					let spineAtlasLoader = new PIXI.spine.core.AtlasAttachmentLoader(spineAtlas);
+					let spineJsonParser = new PIXI.spine.core.SkeletonJson(spineAtlasLoader);
+					
+					pixiSpine = new PIXI.spine.Spine(spineJsonParser.readSkeletonData(rawSkeletonData));
+					
+					pixiSpine.skeleton.setSkinByName(skin);
+					pixiSpine.state.setAnimation(0, animation, true);
+					
+					if (mixInfos !== undefined) {
+						EACH(mixInfos, (mixInfo) => {
+							pixiSpine.stateData.setMixByName(mixInfo.from, mixInfo.to, mixInfo.duration);
+						});
 					}
-				});
-				
-				self.addToPixiContainer(pixiSpine);
-				
-				self.fireEvent('load');
-			}
+					
+					pixiSpine.zIndex = -9999999;
+					pixiSpine.blendMode = SkyEngine.Util.BlendMode.getPixiBlendMode(self.getBlendMode());
+					
+					pixiSpine.state.addListener({
+						event : (entry, event) => {
+							self.fireEvent(event.data.name);
+						},
+						complete : () => {
+							self.fireEvent('animationend');
+						}
+					});
+					
+					self.addToPixiContainer(pixiSpine);
+					
+					self.fireEvent('load');
+				}
+			});
 		}]);
 		
 		// 스킨을 변경합니다.
