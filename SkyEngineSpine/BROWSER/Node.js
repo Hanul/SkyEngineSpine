@@ -94,6 +94,8 @@ SkyEngineSpine.Node = CLASS({
 		
 		// 스킨을 변경합니다.
 		let changeSkin = self.changeSkin = (_skin) => {
+			//REQUIRED: skin
+			
 			skin = _skin;
 			
 			if (pixiSpine !== undefined) {
@@ -103,6 +105,8 @@ SkyEngineSpine.Node = CLASS({
 		
 		// 애니메이션을 변경합니다.
 		let changeAnimation = self.changeAnimation = (_animation) => {
+			//REQUIRED: animation
+			
 			animation = _animation;
 			
 			if (pixiSpine !== undefined) {
@@ -115,6 +119,17 @@ SkyEngineSpine.Node = CLASS({
 		
 		let getAnimation = self.getAnimation = () => {
 			return animation;
+		};
+		
+		let setAttachment = self.setAttachment = (params) => {
+			//REQUIRED: params
+			//REQUIRED: params.slot
+			//REQUIRED: params.attachment
+			
+			let slot = params.slot;
+			let attachment = params.attachment;
+			
+			pixiSpine.skeleton.setAttachment(slot, attachment);
 		};
 	}
 });
