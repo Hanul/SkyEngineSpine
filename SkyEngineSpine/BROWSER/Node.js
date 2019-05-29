@@ -35,17 +35,39 @@ SkyEngineSpine.Node = CLASS({
 		PARALLEL([
 		(done) => {
 			
-			GET(json, (result) => {
-				rawSkeletonData = JSON.parse(result);
-				done();
+			let retry = RAR(() => {
+				
+				GET(json, {
+					
+					// 로드 오류 시 재시도
+					error : () => {
+						retry();
+					},
+					
+					success : (result) => {
+						rawSkeletonData = JSON.parse(result);
+						done();
+					}
+				});
 			});
 		},
 		
 		(done) => {
 			
-			GET(atlas, (result) => {
-				rawAtlasData = result;
-				done();
+			let retry = RAR(() => {
+				
+				GET(atlas, {
+					
+					// 로드 오류 시 재시도
+					error : () => {
+						retry();
+					},
+					
+					success : (result) => {
+						rawAtlasData = result;
+						done();
+					}
+				});
 			});
 		},
 		
